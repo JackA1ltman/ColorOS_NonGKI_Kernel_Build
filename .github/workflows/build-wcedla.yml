@@ -1,0 +1,144 @@
+name: Wcedla - SM8250 - ColorOS 16
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-kernel:
+    name: Oneplus 8 Series - ${{ matrix.name }}
+    runs-on: ubuntu-latest # u can changed to ubuntu 22.04, and need container set ubuntu-latest
+    # container: ubuntu:bionic # if u need use arch linux -> archlinux/archlinux:latest or ubuntu 20.04 -> ubuntu:focal
+    strategy:
+      matrix:
+        include:
+          - repo: "https://github.com/JackA1ltman/kernel_oneplus_sm8250_coloros16.git"
+            command: "LD=ld.lld"
+            branch: "lineage-20"
+            name: "original"
+            author: "Wcedla"
+          - repo: "https://github.com/JackA1ltman/kernel_oneplus_sm8250_coloros16.git"
+            command: "LD=ld.lld"
+            branch: "upstream"
+            name: "upstream"
+            author: "Wcedla"
+      fail-fast: false
+    env:
+      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
+      CCACHE_NOHASHDIR: "true"
+      CCACHE_HARDLINK: "true"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Remove useless tools
+        run: |
+          sudo rm -rf /opt/hostedtoolcache
+          df -h
+
+      - name: Install necessary packages
+        run: |
+          sudo apt update
+          sudo apt install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev make optipng  maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler cpio coccinelle -y
+          sudo apt-get install zstd libc6 binutils libc6-dev-i386 gcc g++ p7zip p7zip-full -y
+
+          # Install Libtinfo5
+          curl -C - --progress-bar -L http://launchpadlibrarian.net/580830584/libtinfo5_6.3-2_amd64.deb -o libtinfo5.deb
+          sudo apt install ./libtinfo5.deb
+          rm -f libtinfo5.deb
+
+          sudo apt install python3 -y
+          sudo rm -rf /usr/bin/python
+          sudo ln -s /usr/bin/python3 /usr/bin/python
+
+      - name: Get build tools
+        run: |
+          cd $GITHUB_WORKSPACE
+
+          git clone "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9.git" -b "android12L-release" gcc-64 --depth=1
+          git clone "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9.git" -b "android12L-release" gcc-32 --depth=1
+
+          git clone https://github.com/LineageOS/android_prebuilts_clang_kernel_linux-x86_clang-r416183b.git clang-custom
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: build-kernel
+          max-size: 2G
+
+      - name: Get Kernel
+        run: |
+          cd $GITHUB_WORKSPACE
+          git clone -b "" "" --depth 1
+          
+      - name: Get Packing Tools
+        run: |
+          cd $GITHUB_WORKSPACE
+          git clone "https://github.com/osm0sis/AnyKernel3.git" -b "master" Anykernel3 --depth=1
+
+      - name: Build Kernel
+        run: |
+          cd $GITHUB_WORKSPACE
+
+          export PATH=$GITHUB_WORKSPACE/clang-custom/bin:$PATH
+
+          make CC="ccache clang" O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- BRAND_SHOW_FLAG=oneplus ${{ matrix.command }} CROSS_COMPILE=$GITHUB_WORKSPACE/gcc-64/bin/aarch64-linux-android- CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/gcc-32/bin/arm-linux-androideabi- vendor/kona-perf_defconfig
+          make -j$(nproc --all) CC="ccache clang" CLANG_TRIPLE=aarch64-linux-gnu- BRAND_SHOW_FLAG=oneplus ${{ matrix.command }} STRIP=llvm-strip CROSS_COMPILE=$GITHUB_WORKSPACE/gcc-64/bin/aarch64-linux-android- CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/gcc-32/bin/arm-linux-androideabi- O=out ARCH=arm64 2>&1|tee error.log
+
+      - name: Make Anykernel3 - Perfix
+        run: |
+          cd $GITHUB_WORKSPACE
+          mkdir -p tmp
+
+          sed -i 's/ExampleKernel by osm0sis @ xda-developers/ColorOS NonGKI Kernel Build by JackAltman @ Github/g' Anykernel3/anykernel.sh
+          sed -i 's/do.devicecheck=1/do.devicecheck=0/g' Anykernel3/anykernel.sh
+          sed -i 's!BLOCK=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;!BLOCK=auto;!g' Anykernel3/anykernel.sh
+          sed -i 's/IS_SLOT_DEVICE=0;/is_slot_device=auto;/g' Anykernel3/anykernel.sh
+
+      - name: Make Anykernel3 Flasher - NoDTB
+        run: |
+          TIME=$(date +"%Y%m%d%H%M%S")
+
+          cd $GITHUB_WORKSPACE
+
+          cp -fp $GITHUB_WORKSPACE/out/arch/arm64/boot/Image tmp
+          echo "Found Image !"
+
+          cp -rp ./Anykernel3/* tmp
+          cd tmp
+          7za a -mx9 tmp.zip *
+          cd ..
+          cp -fp tmp/tmp.zip oneplus8-coloros16-$TIME-${{ matrix.name }}-${{ matrix.author }}.zip
+          rm -rf tmp
+
+          echo "PACK_NAME=oneplus8-coloros16-$TIME-${{ matrix.name }}-${{ matrix.author }}.zip" >> $GITHUB_ENV
+
+      - name: Make Anykernel3 Flasher - DTB
+        run: |
+          TIME=$(date +"%Y%m%d%H%M%S")
+
+          cd $GITHUB_WORKSPACE
+
+          cp -fp $GITHUB_WORKSPACE/out/arch/arm64/boot/Image tmp
+          echo "Found Image !"
+          cp -fp $GITHUB_WORKSPACE/out/arch/arm64/boot/dtb tmp
+          echo "Found DTB !"
+          cp -fp $GITHUB_WORKSPACE/out/arch/arm64/boot/dtbo.img tmp
+          echo "Found dtbo.img !"
+
+          cp -rp ./Anykernel3/* tmp
+          cd tmp
+          7za a -mx9 tmp.zip *
+          cd ..
+          cp -fp tmp/tmp.zip oneplus8-coloros16-$TIME-${{ matrix.name }}-${{ matrix.author }}-DTB.zip
+          rm -rf tmp
+
+          echo "PACK_NAME_DTB=oneplus8-coloros16-$TIME-${{ matrix.name }}-${{ matrix.author }}-DTB.zip" >> $GITHUB_ENV
+
+      - name: Upload Build Artifacts For Anykernel3
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kernel-${{ matrix.name }}
+          path: |
+            ${{ env.PACK_NAME }}
+            ${{ env.PACK_NAME_DTB }}
