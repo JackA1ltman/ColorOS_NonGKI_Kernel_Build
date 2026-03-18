@@ -1,0 +1,113 @@
+name: Build and Release Kernel
+
+permissions:
+  contents: write
+  actions: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      build-kernel:
+        description: 'Build Kernel ?'
+        required: true
+        type: boolean
+        default: true
+
+      release-kernel:
+        description: 'Release Kernel ?'
+        required: true
+        type: boolean
+        default: true
+
+  schedule:
+    - cron: '0 3 * * 3'
+
+jobs:
+  build-kernel:
+    name: "Step Build Kernel"
+    uses: ./.github/workflows/build-kernel.yml
+    secrets: inherit
+    strategy:
+      fail-fast: true
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.build-kernel == true)
+
+  release-kernel:
+    name: "Step Release Kernel"
+    runs-on: ubuntu-latest
+    needs:
+      - build-kernel
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.release-kernel == true)
+    env:
+      REPO_OWNER: JackA1ltman
+      REPO_NAME: ColorOS_NonGKI_Kernel_Build
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RELEASE_NAME: "Pre-built"
+      RELEASE_NOTES: |
+        Below is the codename reference table. Please select the image or archive you need based on this table.
+
+        | Device Name | Codename | Kernel | System | Android |
+        |----------|----------|----------|----------|----------|
+        | OnePlus 8 | instantnoodle | 4.19 | ColorOS OS 15 | 15 |
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Download Artifacts for A12 (Only if A12 Build is successful or input is true or empty)
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./downloaded-artifacts
+
+      # Get the Latest Tag from GitHub
+      - name: Generate and Create New Tag
+        run: |
+          # Fetch the latest tag from GitHub (this is the latest tag based on the GitHub API)
+          LATEST_TAG=$(gh api repos/$REPO_OWNER/$REPO_NAME/tags --jq '.[0].name')
+          if [ -z "$LATEST_TAG" ]; then
+            LATEST_TAG="0000000001" # if have no any releases.
+          fi
+
+          NEW_TAG=$(date +%s)
+
+          # Output the new tag to be used
+          echo "New tag: $NEW_TAG"
+
+          # Set the new tag as an environment variable to be used in later steps
+          TIME=$(date +"%Y-%m-%d %H:%M")
+          echo "TIME=$TIME" >> $GITHUB_ENV
+          echo "NEW_TAG=${NEW_TAG}" >> $GITHUB_ENV
+
+          # Create the tag in the repository
+          git tag $NEW_TAG
+          git push --tags
+
+      # Create GitHub Release and upload files if make_release is true
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ env.NEW_TAG }}
+          prerelease: false
+          release_name: "${{ env.RELEASE_NAME }} ${{ env.TIME }}"
+          body: ${{ env.RELEASE_NOTES }}
+
+      - name: Upload Release Assets Dynamically
+        run: |
+          # Loop through all files in the downloaded-artifacts directory
+          for file in ./downloaded-artifacts/Kernel-*/*; do
+              # Skip directories
+              if [ -d "$file" ]; then
+                  continue
+              fi
+
+              # Upload the file to the GitHub release
+              echo "Uploading $file..."
+              gh release upload ${{ env.NEW_TAG }} "$file"
+          done
+
+      # Display Files Uploaded
+      - name: Display Files Uploaded
+        run: |
+          echo "GitHub release created with the following files:"
+          ls ./downloaded-artifacts/**/*
