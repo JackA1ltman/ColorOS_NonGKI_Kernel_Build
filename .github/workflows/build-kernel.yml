@@ -45,9 +45,11 @@ jobs:
       RELEASE_NOTES: |
         Below is the codename reference table. Please select the image or archive you need based on this table.
 
-        | Device Name | Codename | Kernel | System | Android |
-        |----------|----------|----------|----------|----------|
-        | OnePlus 8 | instantnoodle | 4.19 | ColorOS OS 15 | 15 |
+        | 内核作者 | 对应系统 | 设备 |
+        |---|---|---|
+        | toraidl | ColorOS 16 | 一加8系列 |
+        | JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 |
+        | Wcedla | ColorOS 16 | 一加8系列 |
 
     steps:
       # Checkout the code
