@@ -1,0 +1,30 @@
+name: Device list
+
+permissions:
+  contents: write
+  actions: write
+
+on:
+  workflow_call:
+
+jobs:
+  toraidl-SM8250-ColorOS16:
+    name: "toraidl - SM8250 - ColorOS 16"
+    strategy:
+      fail-fast: true
+    uses: ./.github/workflows/build-toraidl.yml
+    secrets: inherit
+
+  JackA1ltman-toraidl-SM8250-ColorOS15-16:
+    name: "JackA1ltman - toraidl - SM8250 - ColorOS 15/16"
+    strategy:
+      fail-fast: true
+    uses: ./.github/workflows/build-toraidl-jackaltman.yml
+    secrets: inherit
+
+  Wcedla-SM8250-ColorOS16:
+    name: "Wcedla - SM8250 - ColorOS 16"
+    strategy:
+      fail-fast: true
+    uses: ./.github/workflows/build-wcedla.yml
+    secrets: inherit
