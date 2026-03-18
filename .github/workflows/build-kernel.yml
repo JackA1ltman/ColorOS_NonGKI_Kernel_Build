@@ -25,7 +25,7 @@ on:
 jobs:
   build-kernel:
     name: "Step Build Kernel"
-    uses: ./.github/workflows/build-kernel.yml
+    uses: ./.github/workflows/device-list.yml
     secrets: inherit
     strategy:
       fail-fast: true
