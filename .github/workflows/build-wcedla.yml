@@ -1,6 +1,7 @@
 name: Wcedla - SM8250 - ColorOS 16
 
 on:
+  workflow_call:
   workflow_dispatch:
 
 jobs:

@@ -1,6 +1,7 @@
 name: JackA1ltman - toraidl - SM8250 - ColorOS 15/16
 
 on:
+  workflow_call:
   workflow_dispatch:
 
 jobs:
