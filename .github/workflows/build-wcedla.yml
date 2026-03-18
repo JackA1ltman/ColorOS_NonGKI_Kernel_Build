@@ -6,7 +6,7 @@ on:
 
 jobs:
   build-kernel:
-    name: Oneplus 8 Series - ${{ matrix.name }}
+    name: Oneplus 8 Series - ${{ matrix.name }} - ${{ matrix.author }}
     runs-on: ubuntu-latest # u can changed to ubuntu 22.04, and need container set ubuntu-latest
     # container: ubuntu:bionic # if u need use arch linux -> archlinux/archlinux:latest or ubuntu 20.04 -> ubuntu:focal
     strategy:
@@ -70,16 +70,16 @@ jobs:
       - name: Get Kernel
         run: |
           cd $GITHUB_WORKSPACE
-          git clone -b "${{ matrix.branch }}" "${{ matrix.repo }}" --depth 1
-          
+          git clone -b "${{ matrix.branch }}" "${{ matrix.repo }}" device_kernel --depth 1
+
       - name: Get Packing Tools
         run: |
-          cd $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE/device_kernel
           git clone "https://github.com/osm0sis/AnyKernel3.git" -b "master" Anykernel3 --depth=1
 
       - name: Build Kernel
         run: |
-          cd $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE/device_kernel
 
           export PATH=$GITHUB_WORKSPACE/clang-custom/bin:$PATH
 
@@ -88,7 +88,7 @@ jobs:
 
       - name: Make Anykernel3 - Perfix
         run: |
-          cd $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE/device_kernel
           mkdir -p tmp
 
           sed -i 's/ExampleKernel by osm0sis @ xda-developers/ColorOS NonGKI Kernel Build by JackAltman @ Github/g' Anykernel3/anykernel.sh
@@ -100,9 +100,9 @@ jobs:
         run: |
           TIME=$(date +"%Y%m%d%H%M%S")
 
-          cd $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE/device_kernel
 
-          cp -fp $GITHUB_WORKSPACE/out/arch/arm64/boot/Image tmp
+          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image tmp
           echo "Found Image !"
 
           cp -rp ./Anykernel3/* tmp
@@ -118,28 +118,28 @@ jobs:
         run: |
           TIME=$(date +"%Y%m%d%H%M%S")
 
-          cd $GITHUB_WORKSPACE
+          cd $GITHUB_WORKSPACE/device_kernel
 
-          cp -fp $GITHUB_WORKSPACE/out/arch/arm64/boot/Image tmp
+          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image tmp
           echo "Found Image !"
-          cp -fp $GITHUB_WORKSPACE/out/arch/arm64/boot/dtb tmp
+          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/dtb tmp
           echo "Found DTB !"
-          cp -fp $GITHUB_WORKSPACE/out/arch/arm64/boot/dtbo.img tmp
+          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/dtbo.img tmp
           echo "Found dtbo.img !"
 
           cp -rp ./Anykernel3/* tmp
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip oneplus8-coloros16-$TIME-${{ matrix.name }}-${{ matrix.author }}-DTB.zip
+          cp -fp tmp/tmp.zip oneplus8-$TIME-${{ matrix.name }}-${{ matrix.author }}-DTB.zip
           rm -rf tmp
 
-          echo "PACK_NAME_DTB=oneplus8-coloros16-$TIME-${{ matrix.name }}-${{ matrix.author }}-DTB.zip" >> $GITHUB_ENV
+          echo "PACK_NAME_DTB=oneplus8-$TIME-${{ matrix.name }}-${{ matrix.author }}-DTB.zip" >> $GITHUB_ENV
 
       - name: Upload Build Artifacts For Anykernel3
         uses: actions/upload-artifact@v4
         with:
           name: Kernel-${{ matrix.name }}
           path: |
-            ${{ env.PACK_NAME }}
-            ${{ env.PACK_NAME_DTB }}
+            device_kernel/${{ env.PACK_NAME }}
+            device_kernel/${{ env.PACK_NAME_DTB }}
