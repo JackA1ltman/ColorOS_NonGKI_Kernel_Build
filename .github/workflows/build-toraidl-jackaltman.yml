@@ -71,7 +71,7 @@ jobs:
       - name: Get Kernel
         run: |
           cd $GITHUB_WORKSPACE
-          git clone -b "" "" --depth 1
+          git clone -b "${{ matrix.branch }}" "${{ matrix.repo }}" --depth 1
           
       - name: Get Packing Tools
         run: |
