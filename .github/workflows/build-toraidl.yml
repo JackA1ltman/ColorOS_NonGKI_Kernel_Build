@@ -77,6 +77,8 @@ jobs:
       - name: Build Kernel
         run: |
           cd $GITHUB_WORKSPACE/device_kernel
+          wget https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Patches/refs/heads/op_kernel/brand_show_flag.patch
+          patch -p1 < brand_show_flag.patch
 
           export PATH=$GITHUB_WORKSPACE/clang-custom/bin:$PATH
 
