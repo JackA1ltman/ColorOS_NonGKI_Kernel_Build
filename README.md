@@ -3,3 +3,11 @@
 | toraidl | ColorOS 16 | 一加8系列 |
 | JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 |
 | Wcedla | ColorOS 16 | 一加8系列 |
+
+### 必读事项
+1. DTB版本仅限 Oneplus 8T 和 Oneplus 9R 刷入
+2. Anykernel3包命名规则：
+    - 设备名称-系统版本-内核作者-内核说明/分支名称-时间-无/DTB
+    - 内核说明/分支名称中
+        - original 代表该内核为作者的原始版本，即除了为编译通过所做修改外，无其他任何修改
+        - 其他名称均为个人维护的版本
