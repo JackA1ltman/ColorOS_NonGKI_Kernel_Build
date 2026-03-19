@@ -104,8 +104,8 @@ jobs:
           cd $GITHUB_WORKSPACE/device_kernel
           mkdir -p tmp
 
-          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image tmp
-          echo "Found Image !"
+          cat Image dtb > Image-dtb
+          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image-dtb tmp
 
           cp -rp ./Anykernel3/* tmp
           cd tmp
@@ -123,12 +123,9 @@ jobs:
           cd $GITHUB_WORKSPACE/device_kernel
           mkdir -p tmp
 
-          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image tmp
-          echo "Found Image !"
-          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/dtb tmp
-          echo "Found DTB !"
+          cat Image dtb > Image-dtb
+          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image-dtb tmp
           cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/dtbo.img tmp
-          echo "Found dtbo.img !"
 
           cp -rp ./Anykernel3/* tmp
           cd tmp
