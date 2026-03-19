@@ -140,7 +140,7 @@ jobs:
       - name: Upload Build Artifacts For Anykernel3
         uses: actions/upload-artifact@v4
         with:
-          name: Kernel-${{ matrix.name }}
+          name: Kernel-${{ env.PACK_NAME }}
           path: |
             device_kernel/${{ env.PACK_NAME }}
             device_kernel/${{ env.PACK_NAME_DTB }}
