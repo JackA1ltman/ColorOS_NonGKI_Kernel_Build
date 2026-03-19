@@ -17,11 +17,13 @@ jobs:
             branch: "staging"
             name: "staging"
             author: "JackA1ltman-toraidl"
+            device: "oneplus8series-coloros16"
           - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
             command: "LD=ld.lld LLVM=1 LLVM_IAS=1"
             branch: "android-15-no-bpf"
             name: "a15-no-bpf"
             author: "JackA1ltman-toraidl"
+            device: "oneplus8series-coloros15"
       fail-fast: false
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
@@ -111,10 +113,10 @@ jobs:
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip oneplus8-coloros16-$TIME-${{ matrix.name }}-${{ matrix.author }}.zip
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME.zip
           rm -rf tmp
 
-          echo "PACK_NAME=oneplus8-coloros16-$TIME-${{ matrix.name }}-${{ matrix.author }}.zip" >> $GITHUB_ENV
+          echo "PACK_NAME=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME.zip" >> $GITHUB_ENV
 
       - name: Make Anykernel3 Flasher - DTB
         run: |
@@ -134,10 +136,10 @@ jobs:
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip oneplus8-$TIME-${{ matrix.name }}-${{ matrix.author }}-DTB.zip
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME-DTB.zip
           rm -rf tmp
 
-          echo "PACK_NAME_DTB=oneplus8-$TIME-${{ matrix.name }}-${{ matrix.author }}-DTB.zip" >> $GITHUB_ENV
+          echo "PACK_NAME_DTB=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME-DTB.zip" >> $GITHUB_ENV
 
       - name: Upload Build Artifacts For Anykernel3
         uses: actions/upload-artifact@v4
