@@ -2,7 +2,7 @@
 |---|---|---|---|
 | toraidl | ColorOS 16 | 一加8系列 | original |
 | JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | staging |
-| Wcedla | ColorOS 16 | 一加8系列 | original, upstream |
+| JackA1ltman - Wcedla | ColorOS 16 | 一加8系列 | original, upstream |
 
 ### 必读事项
 1. DTB版本仅限 Oneplus 8T 和 Oneplus 9R 刷入

@@ -1,4 +1,4 @@
-name: Wcedla - SM8250 - ColorOS 16
+name: JackA1ltman - Wcedla - SM8250 - ColorOS 16
 
 on:
   workflow_call:
@@ -91,11 +91,15 @@ jobs:
           git clone -b "${{ matrix.branch }}" "${{ matrix.repo }}" device_kernel --depth 1
 
           if [[ "${{ matrix.ksu }}" == "true" ]]; then
+            echo "KSU_NAME=-ksu" >> $GITHUB_ENV
+
             cd device_kernel
             curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/refs/heads/main/kernel/setup.sh" | bash -s main
             echo "CONFIG_KSU=y" >> ./arch/arm64/configs/vendor/kona-perf_defconfig
             curl -LSs "https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/syscall_hook_patches.sh" | bash -s
             curl -LSs "https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/backport_patches.sh" | bash -s
+          else
+            echo "KSU_NAME=" >> $GITHUB_ENV
           fi
 
       - name: Get Packing Tools
@@ -141,10 +145,10 @@ jobs:
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME$KSU_NAME.zip
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}.zip
           rm -rf tmp
 
-          echo "PACK_NAME=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME$KSU_NAME.zip" >> $GITHUB_ENV
+          echo "PACK_NAME=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}.zip" >> $GITHUB_ENV
 
       - name: Make Anykernel3 Flasher - DTB
         run: |
@@ -167,10 +171,10 @@ jobs:
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME$KSU_NAME-DTB.zip
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}-DTB.zip
           rm -rf tmp
 
-          echo "PACK_NAME_DTB=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME$KSU_NAME-DTB.zip" >> $GITHUB_ENV
+          echo "PACK_NAME_DTB=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}-DTB.zip" >> $GITHUB_ENV
 
       - name: Upload Build Artifacts For Anykernel3
         uses: actions/upload-artifact@v4
