@@ -18,6 +18,14 @@ jobs:
             name: "original"
             author: "toraidl"
             device: "oneplus8series-coloros16"
+            ksu: false
+          - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
+            command: "NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip"
+            branch: "upstream-original"
+            name: "original"
+            author: "toraidl"
+            device: "oneplus8series-coloros16"
+            ksu: true
       fail-fast: false
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
@@ -72,6 +80,14 @@ jobs:
 
           sed -i '$a\CONFIG_TECHPACK_CAMERA_ONEPLUS=y' device_kernel/arch/arm64/configs/vendor/kona-perf_defconfig
           sed -i '/-include oplus_native_features.mk/i\export BRAND_SHOW_FLAG=oneplus' device_kernel/OplusKernelEnvConfig.mk
+
+          if [[ "${{ matrix.ksu }}" == "true" ]]; then
+            cd device_kernel
+            curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/refs/heads/main/kernel/setup.sh" | bash -s main
+            echo "CONFIG_KSU=y" >> ./arch/arm64/configs/vendor/kona-perf_defconfig
+            curl -LSs "https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/syscall_hook_patches.sh" | bash -s
+            curl -LSs "https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/backport_patches.sh" | bash -s
+          fi
           
       - name: Get Packing Tools
         run: |
@@ -100,6 +116,12 @@ jobs:
         run: |
           TIME=$(date +"%Y%m%d%H%M%S")
 
+          if [[ "${{ matrix.ksu }}" == "true" ]];
+            KSU_NAME="-ksu"
+          else
+            KSU_NAME=""
+          fi
+
           cd $GITHUB_WORKSPACE/device_kernel
           mkdir -p tmp
 
@@ -110,14 +132,20 @@ jobs:
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME.zip
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME$KSU_NAME.zip
           rm -rf tmp
 
-          echo "PACK_NAME=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME.zip" >> $GITHUB_ENV
+          echo "PACK_NAME=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME$KSU_NAME.zip" >> $GITHUB_ENV
 
       - name: Make Anykernel3 Flasher - DTB
         run: |
           TIME=$(date +"%Y%m%d%H%M%S")
+
+          if [[ "${{ matrix.ksu }}" == "true" ]];
+            KSU_NAME="-ksu"
+          else
+            KSU_NAME=""
+          fi
 
           cd $GITHUB_WORKSPACE/device_kernel
           mkdir -p tmp
@@ -130,10 +158,10 @@ jobs:
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME-DTB.zip
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME$KSU_NAME-DTB.zip
           rm -rf tmp
 
-          echo "PACK_NAME_DTB=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME-DTB.zip" >> $GITHUB_ENV
+          echo "PACK_NAME_DTB=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME$KSU_NAME-DTB.zip" >> $GITHUB_ENV
 
       - name: Upload Build Artifacts For Anykernel3
         uses: actions/upload-artifact@v4
