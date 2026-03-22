@@ -47,7 +47,7 @@ jobs:
         |---|---|---|---|
         | toraidl | ColorOS 16 | 一加8系列 | original |
         | JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | staging |
-        | Wcedla | ColorOS 16 | 一加8系列 | original, upstream |
+        | JackA1ltman - Wcedla | ColorOS 16 | 一加8系列 | original, upstream |
 
     steps:
       # Checkout the code
