@@ -129,12 +129,6 @@ jobs:
         run: |
           TIME=$(date +"%Y%m%d%H%M%S")
 
-          if [[ "${{ matrix.ksu }}" == "true" ]];
-            KSU_NAME="-ksu"
-          else
-            KSU_NAME=""
-          fi
-
           cd $GITHUB_WORKSPACE/device_kernel
           mkdir -p tmp
 
@@ -153,12 +147,6 @@ jobs:
       - name: Make Anykernel3 Flasher - DTB
         run: |
           TIME=$(date +"%Y%m%d%H%M%S")
-
-          if [[ "${{ matrix.ksu }}" == "true" ]];
-            KSU_NAME="-ksu"
-          else
-            KSU_NAME=""
-          fi
 
           cd $GITHUB_WORKSPACE/device_kernel
           mkdir -p tmp
