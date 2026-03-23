@@ -124,8 +124,8 @@ jobs:
           cd $GITHUB_WORKSPACE/device_kernel
           mkdir -p tmp
 
-          cat $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/dtb > $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image-dtb
-          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image-dtb tmp
+          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image tmp
+          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/dtb tmp
 
           cp -rp ./Anykernel3/* tmp
           cd tmp
@@ -143,8 +143,8 @@ jobs:
           cd $GITHUB_WORKSPACE/device_kernel
           mkdir -p tmp
 
-          cat $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/dtb > $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image-dtb
-          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image-dtb tmp
+          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image tmp
+          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/dtb tmp
           cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/dtbo.img tmp
 
           cp -rp ./Anykernel3/* tmp
