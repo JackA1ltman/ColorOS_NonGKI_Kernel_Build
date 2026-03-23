@@ -2,7 +2,7 @@
 |---|---|---|---|
 | toraidl | ColorOS 16 | 一加8系列 | original |
 | JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | staging |
-| JackA1ltman - Wcedla | ColorOS 16 | 一加8系列 | original, upstream |
+| JackA1ltman - Wcedla | ColorOS 16 | 一加8系列 | original, upstream-dev |
 
 ### 必读事项
 1. DTB版本一加8全系可刷入
