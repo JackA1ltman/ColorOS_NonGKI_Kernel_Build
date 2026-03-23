@@ -5,7 +5,7 @@
 | JackA1ltman - Wcedla | ColorOS 16 | 一加8系列 | original, upstream |
 
 ### 必读事项
-1. DTB版本仅限 Oneplus 8T 和 Oneplus 9R 刷入
+1. DTB版本一加8全系可刷入
 2. Anykernel3包命名规则：
     - 设备名称-系统版本-内核作者-内核说明/分支名称-时间-无/DTB
     - 内核说明/分支名称中
