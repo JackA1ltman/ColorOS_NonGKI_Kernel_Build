@@ -1,7 +1,7 @@
 | 内核作者 | 对应系统 | 设备 | 命名 |
 |---|---|---|---|
 | toraidl | ColorOS 16 | 一加8系列 | original |
-| JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | staging |
+| JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | staging, upstream-dev |
 | JackA1ltman - Wcedla | ColorOS 16 | 一加8系列 | original, upstream-dev |
 
 ### 必读事项
