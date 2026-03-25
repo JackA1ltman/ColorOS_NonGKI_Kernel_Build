@@ -12,16 +12,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - repo: "https://github.com/toraidl/android_kernel_oneplus_sm8250.git"
+          - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
             command: "NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip"
-            branch: "bpf-5.10-backport"
+            branch: "upstream-original"
             name: "original"
             author: "toraidl"
             device: "oneplus8series-coloros16"
             ksu: false
-          - repo: "https://github.com/toraidl/android_kernel_oneplus_sm8250.git"
+          - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
             command: "NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip"
-            branch: "bpf-5.10-backport"
+            branch: "upstream-original"
             name: "original"
             author: "toraidl"
             device: "oneplus8series-coloros16"
