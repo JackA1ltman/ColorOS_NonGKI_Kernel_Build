@@ -62,3 +62,10 @@ jobs:
 
           repo sync --force-sync --no-clone-bundle --current-branch --no-tags -j$(nproc --all)
           BUILD_CONFIG=kernel/msm-5.4/build.config.martini VARIANT=qgki LTO=thin BUILD_KERNEL=1 CC="ccache clang" KCFLAGS="-Wno-error=strict-prototypes -Wno-strict-prototypes" build/build.sh
+
+      - name: Upload Build Artifacts For Anykernel3
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kernel
+          path: |
+            out/msm-5.4-lahaina-qgki/
