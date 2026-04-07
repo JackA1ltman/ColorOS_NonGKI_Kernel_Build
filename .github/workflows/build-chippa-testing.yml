@@ -68,4 +68,4 @@ jobs:
         with:
           name: Kernel
           path: |
-            out/msm-5.4-lahaina-qgki/
+            out/
