@@ -61,4 +61,4 @@ jobs:
           cd $GITHUB_WORKSPACE
 
           repo sync --force-sync --no-clone-bundle --current-branch --no-tags -j$(nproc --all)
-          BUILD_CONFIG=kernel/msm-5.4/build.config.martini VARIANT=qgki LTO=full BUILD_KERNEL=1 build/build.sh
+          BUILD_CONFIG=kernel/msm-5.4/build.config.martini VARIANT=qgki LTO=full BUILD_KERNEL=1 KCFLAGS="-Wno-error=strict-prototypes -Wno-strict-prototypes" build/build.sh
