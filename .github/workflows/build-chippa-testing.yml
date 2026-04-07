@@ -1,0 +1,64 @@
+name: Chippa-a - SM8350 - ColorOS 16
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  build-kernel:
+    name: Oneplus 9 RT - ${{ matrix.name }} - ${{ matrix.author }}
+    runs-on: ubuntu-latest # u can changed to ubuntu 22.04, and need container set ubuntu-latest
+    # container: ubuntu:bionic # if u need use arch linux -> archlinux/archlinux:latest or ubuntu 20.04 -> ubuntu:focal
+    strategy:
+      matrix:
+        include:
+          - name: "original"
+            author: "chippa-a"
+            device: "oneplus9rt-coloros16"
+            ksu: false
+      fail-fast: false
+    env:
+      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
+      CCACHE_NOHASHDIR: "true"
+      CCACHE_HARDLINK: "true"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Remove useless tools
+        run: |
+          sudo rm -rf /opt/hostedtoolcache
+          df -h
+
+      - name: Install necessary packages
+        run: |
+          sudo apt update
+          sudo apt install git python3 curl -y
+
+          mkdir -p ~/bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+          echo "$HOME/bin" >> $GITHUB_PATH
+
+      - name: Get build tools
+        run: |
+          cd $GITHUB_WORKSPACE
+
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+
+          repo init -u https://github.com/JackA1ltman/android_kernel_manifest.git -b oneplus/sm8350_b_16.0.0_oneplus9rt
+
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: build-kernel
+          max-size: 2G
+
+      - name: Build Kernel
+        run: |
+          cd $GITHUB_WORKSPACE
+
+          repo sync --force-sync --no-clone-bundle --current-branch --no-tags -j$(nproc --all)
+          BUILD_CONFIG=kernel/msm-5.4/build.config.msm.martini VARIANT=qgki LTO=full BUILD_KERNEL=1 build/build.sh
