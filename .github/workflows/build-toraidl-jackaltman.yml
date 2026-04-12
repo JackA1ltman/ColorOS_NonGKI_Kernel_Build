@@ -14,25 +14,12 @@ jobs:
         include:
           - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
             command: "LD=ld.lld LLVM=1 LLVM_IAS=1"
-            branch: "staging"
-            name: "staging"
-            author: "JackA1ltman-toraidl"
-            device: "oneplus8series-coloros16"
-            ksu: false
-          - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
-            command: "LD=ld.lld LLVM=1 LLVM_IAS=1"
-            branch: "staging"
-            name: "staging"
-            author: "JackA1ltman-toraidl"
-            device: "oneplus8series-coloros16"
-            ksu: true
-          - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
-            command: "LD=ld.lld LLVM=1 LLVM_IAS=1"
             branch: "upstream-dev"
             name: "upstream-dev"
             author: "JackA1ltman-toraidl"
             device: "oneplus8series-coloros16"
             ksu: false
+            kpm: false
           - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
             command: "LD=ld.lld LLVM=1 LLVM_IAS=1"
             branch: "upstream-dev"
@@ -40,6 +27,15 @@ jobs:
             author: "JackA1ltman-toraidl"
             device: "oneplus8series-coloros16"
             ksu: true
+            kpm: false
+          - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
+            command: "LD=ld.lld LLVM=1 LLVM_IAS=1"
+            branch: "upstream-dev"
+            name: "upstream-dev"
+            author: "JackA1ltman-toraidl"
+            device: "oneplus8series-coloros16"
+            ksu: true
+            kpm: true
       fail-fast: false
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
@@ -101,6 +97,15 @@ jobs:
             echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./arch/arm64/configs/vendor/kona-perf_defconfig
             curl -LSs "https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/syscall_hook_patches.sh" | bash -s
             curl -LSs "https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/backport_patches.sh" | bash -s
+
+            if [[ "${{ matrix.kpm }}" == "true" ]]; then
+                echo "KPM_NAME=-kpm" >> $GITHUB_ENV
+
+                echo "CONFIG_KALLSYMS=y" >> ./arch/arm64/configs/vendor/kona-perf_defconfig
+                echo "CONFIG_KALLSYMS_ALL=y" >> ./arch/arm64/configs/vendor/kona-perf_defconfig
+                curl "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU_patch/refs/heads/main/kpm/patch_linux" -o patch
+                chmod +x patch
+            fi
           else
             echo "KSU_NAME=" >> $GITHUB_ENV
           fi
@@ -119,6 +124,14 @@ jobs:
           make CC="ccache clang" O=out ARCH=arm64 CLANG_TRIPLE=aarch64-linux-gnu- BRAND_SHOW_FLAG=oneplus ${{ matrix.command }} CROSS_COMPILE=$GITHUB_WORKSPACE/gcc-64/bin/aarch64-linux-android- CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/gcc-32/bin/arm-linux-androideabi- vendor/kona-perf_defconfig
           make -j$(nproc --all) CC="ccache clang" CLANG_TRIPLE=aarch64-linux-gnu- BRAND_SHOW_FLAG=oneplus ${{ matrix.command }} STRIP=llvm-strip CROSS_COMPILE=$GITHUB_WORKSPACE/gcc-64/bin/aarch64-linux-android- CROSS_COMPILE_ARM32=$GITHUB_WORKSPACE/gcc-32/bin/arm-linux-androideabi- O=out ARCH=arm64 2>&1|tee error.log
 
+          if [[ "${{ matrix.kpm }}" == "true" ]]; then
+
+            cp patch out/arch/arm64/boot/
+            cd out/arch/arm64/boot/
+            rm -f Image
+            mv oImage Image
+          fi
+
       - name: Make Anykernel3 - Perfix
         run: |
           cd $GITHUB_WORKSPACE/device_kernel
@@ -136,16 +149,15 @@ jobs:
           mkdir -p tmp
 
           cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/Image tmp
-          cp -fp $GITHUB_WORKSPACE/device_kernel/out/arch/arm64/boot/dtb tmp
 
           cp -rp ./Anykernel3/* tmp
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}.zip
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KPM_NAME }}${{ env.KSU_NAME }}.zip
           rm -rf tmp
 
-          echo "PACK_NAME=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}.zip" >> $GITHUB_ENV
+          echo "PACK_NAME=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KPM_NAME }}${{ env.KSU_NAME }}.zip" >> $GITHUB_ENV
 
       - name: Make Anykernel3 Flasher - DTB
         run: |
@@ -162,10 +174,10 @@ jobs:
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}-DTB.zip
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KPM_NAME }}${{ env.KSU_NAME }}-DTB.zip
           rm -rf tmp
 
-          echo "PACK_NAME_DTB=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}-DTB.zip" >> $GITHUB_ENV
+          echo "PACK_NAME_DTB=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KPM_NAME }}${{ env.KSU_NAME }}-DTB.zip" >> $GITHUB_ENV
 
       - name: Upload Build Artifacts For Anykernel3
         uses: actions/upload-artifact@v4
