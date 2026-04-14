@@ -101,6 +101,7 @@ jobs:
             if [[ "${{ matrix.kpm }}" == "true" ]]; then
                 echo "KPM_NAME=-kpm" >> $GITHUB_ENV
 
+                echo "CONFIG_KPM=y" >> ./arch/arm64/configs/vendor/kona-perf_defconfig
                 echo "CONFIG_KALLSYMS=y" >> ./arch/arm64/configs/vendor/kona-perf_defconfig
                 echo "CONFIG_KALLSYMS_ALL=y" >> ./arch/arm64/configs/vendor/kona-perf_defconfig
                 curl "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU_patch/refs/heads/main/kpm/patch_linux" -o patch
