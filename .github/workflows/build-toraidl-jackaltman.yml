@@ -14,7 +14,7 @@ jobs:
         include:
           - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
             command: "LD=ld.lld LLVM=1 LLVM_IAS=1"
-            branch: "upstream-dev"
+            branch: "upstream-latest"
             name: "upstream-dev"
             author: "JackA1ltman-toraidl"
             device: "oneplus8series-coloros16"
@@ -22,7 +22,7 @@ jobs:
             kpm: false
           - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
             command: "LD=ld.lld LLVM=1 LLVM_IAS=1"
-            branch: "upstream-dev"
+            branch: "upstream-latest"
             name: "upstream-dev"
             author: "JackA1ltman-toraidl"
             device: "oneplus8series-coloros16"
@@ -30,7 +30,7 @@ jobs:
             kpm: false
           - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
             command: "LD=ld.lld LLVM=1 LLVM_IAS=1"
-            branch: "upstream-dev"
+            branch: "upstream-latest"
             name: "upstream-dev"
             author: "JackA1ltman-toraidl"
             device: "oneplus8series-coloros16"

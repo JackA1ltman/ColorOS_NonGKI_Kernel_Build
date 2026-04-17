@@ -1,8 +1,7 @@
 | 内核作者 | 对应系统 | 设备 | 命名 |
 |---|---|---|---|
 | toraidl | ColorOS 16 | 一加8系列 | original |
-| JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | upstream-dev |
-| JackA1ltman - Wcedla | ColorOS 16 | 一加8系列 | original, upstream-dev |
+| JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | upstream-original |
 
 ### 必读事项
 1. DTB版本一加8全系可刷入
