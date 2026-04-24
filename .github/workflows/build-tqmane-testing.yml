@@ -74,9 +74,15 @@ jobs:
 
           BUILD_CONFIG=kernel/msm-5.4/build.config.msm.lahaina VARIANT=qgki LTO=thin BUILD_KERNEL=1 BRAND_SHOW_FLAG=oneplus CC="ccache clang" build/build.sh
 
+          mkdir need_file
+
+          cp -f out/arch/arm64/boot/dts/vendor/oplus/lemonadev/* need_file/
+          cp out/arch/arm64/boot/dts/vendor/qcom/dtbo.img need_file/dtbo_qcom.img
+          cp out/msm-5.4-lahaina-qgki/dist/Image need_file/Image
+
       - name: Upload Build Artifacts For Anykernel3
         uses: actions/upload-artifact@v4
         with:
           name: Kernel
           path: |
-            out/msm-5.4-lahaina-qgki/dist
+            need_file
