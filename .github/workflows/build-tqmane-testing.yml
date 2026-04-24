@@ -65,9 +65,11 @@ jobs:
           cd kernel/msm-5.4
 
           curl -LSs "https://raw.githubusercontent.com/ReSukiSU/ReSukiSU/refs/heads/main/kernel/setup.sh" | bash -s main
-          echo "CONFIG_KSU=y" >> ./arch/arm64/configs/vendor/kona-perf_defconfig
-          echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./arch/arm64/configs/vendor/kona-perf_defconfig
+          echo "CONFIG_KSU=y" >> ./arch/arm64/configs/vendor/lahaina_QGKI.config
+          echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./arch/arm64/configs/vendor/lahaina_QGKI.config
           curl -LSs "https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/syscall_hook_patches.sh" | bash -s
           curl -LSs "https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/backport_patches.sh" | bash -s
+
+          cd ../../
 
           BUILD_CONFIG=kernel/msm-5.4/build.config.msm.lahaina VARIANT=qgki LTO=thin BUILD_KERNEL=1 BRAND_SHOW_FLAG=oneplus CC="ccache clang" build/build.sh
