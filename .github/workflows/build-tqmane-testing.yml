@@ -73,3 +73,10 @@ jobs:
           cd ../../
 
           BUILD_CONFIG=kernel/msm-5.4/build.config.msm.lahaina VARIANT=qgki LTO=thin BUILD_KERNEL=1 BRAND_SHOW_FLAG=oneplus CC="ccache clang" build/build.sh
+
+      - name: Upload Build Artifacts For Anykernel3
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kernel
+          path: |
+            out/msm-5.4-lahaina-qgki/dist
