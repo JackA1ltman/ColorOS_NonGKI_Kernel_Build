@@ -76,13 +76,13 @@ jobs:
 
           mkdir need_file
 
-          cp -f kernel/msm-5.4/out/arch/arm64/boot/dts/vendor/oplus/lemonadev/* need_file/
-          cp kernel/msm-5.4/out/arch/arm64/boot/dts/vendor/qcom/dtbo.img need_file/dtbo_qcom.img
-          cp kernel/msm-5.4/out/msm-5.4-lahaina-qgki/dist/Image need_file/Image
+          #cp -f kernel/msm-5.4/out/arch/arm64/boot/dts/vendor/oplus/lemonadev/* need_file/
+          #cp kernel/msm-5.4/out/arch/arm64/boot/dts/vendor/qcom/dtbo.img need_file/dtbo_qcom.img
+          #cp kernel/msm-5.4/out/msm-5.4-lahaina-qgki/dist/Image need_file/Image
 
       - name: Upload Build Artifacts For Anykernel3
         uses: actions/upload-artifact@v4
         with:
           name: Kernel
           path: |
-            need_file
+            out
