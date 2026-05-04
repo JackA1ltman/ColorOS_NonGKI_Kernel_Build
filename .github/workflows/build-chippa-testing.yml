@@ -63,9 +63,22 @@ jobs:
           repo sync --force-sync --no-clone-bundle --current-branch --no-tags -j$(nproc --all)
           BUILD_CONFIG=kernel/msm-5.4/build.config.martini VARIANT=qgki LTO=thin BUILD_KERNEL=1 CC="ccache clang" KCFLAGS="-Wno-error=strict-prototypes -Wno-strict-prototypes" build/build.sh
 
+          mkdir need_file_oplus
+          mkdir need_file_qcom
+          mkdir need_modules
+          mkdir need_files
+
+          cp -f kernel/msm-5.4/out/msm-5.4-lahaina-qgki/arch/arm64/boot/dts/vendor/oplus/martini/* need_file_oplus/
+          cp kernel/msm-5.4/out/msm-5.4-lahaina-qgki/arch/arm64/boot/dts/vendor/qcom/* need_file_qcom/
+          cp kernel/msm-5.4/out/msm-5.4-lahaina-qgki/dist/Image need_files/Image
+          cp kernel/msm-5.4/out/msm-5.4-lahaina-qgki/dist/*.ko need_modules/
+
       - name: Upload Build Artifacts For Anykernel3
         uses: actions/upload-artifact@v4
         with:
           name: Kernel
           path: |
-            out/
+            need_file_oplus/
+            need_file_qcom/
+            need_modules/
+            need_files/
