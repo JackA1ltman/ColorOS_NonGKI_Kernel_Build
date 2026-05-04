@@ -68,8 +68,8 @@ jobs:
           mkdir need_modules
           mkdir need_files
 
-          cp -f kernel/msm-5.4/out/msm-5.4-lahaina-qgki/arch/arm64/boot/dts/vendor/oplus/martini/* need_file_oplus/
-          cp kernel/msm-5.4/out/msm-5.4-lahaina-qgki/arch/arm64/boot/dts/vendor/qcom/* need_file_qcom/
+          cp -f kernel/msm-5.4/out/msm-5.4-lahaina-qgki/kernel/msm-5.4/arch/arm64/boot/dts/vendor/oplus/martini/* need_file_oplus/
+          cp kernel/msm-5.4/out/msm-5.4-lahaina-qgki/kernel/msm-5.4/arch/arm64/boot/dts/vendor/qcom/* need_file_qcom/
           cp kernel/msm-5.4/out/msm-5.4-lahaina-qgki/dist/Image need_files/Image
           cp kernel/msm-5.4/out/msm-5.4-lahaina-qgki/dist/*.ko need_modules/
 
