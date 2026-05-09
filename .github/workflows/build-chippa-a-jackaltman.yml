@@ -21,7 +21,7 @@ jobs:
             author: "JackA1ltman-chippa-a"
             device: "oneplus9rt-coloros16"
             defconfig: "9rt_defconfig"
-            device_codename: "lemonadev"
+            device_codename: "martini"
             ksu: true
             kpm: true
       fail-fast: false

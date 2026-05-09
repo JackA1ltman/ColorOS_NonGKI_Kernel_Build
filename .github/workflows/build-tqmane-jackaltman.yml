@@ -20,8 +20,8 @@ jobs:
             name: "original"
             author: "JackA1ltman-tqmane"
             device: "oneplus9series-coloros16"
-            defconfig: "9rt_defconfig"
-            device_codename: "martini"
+            defconfig: "9p_defconfig"
+            device_codename: "lemonadev"
             ksu: true
             kpm: true
       fail-fast: false
