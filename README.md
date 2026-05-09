@@ -2,9 +2,11 @@
 |---|---|---|---|
 | toraidl | ColorOS 16 | 一加8系列 | original |
 | JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | upstream-original |
+| JackA1ltman - Chippa-a | ColorOS 16 | 一加9 RT | original |
+| JackA1ltman - tqmane | ColorOS 16 | 一加9、一加9 Pro | original |
 
 ### 必读事项
-1. DTB版本一加8全系可刷入
+1. DTB版本一加8全系、一加9全系可刷入
 2. Anykernel3包命名规则：
     - 设备名称-系统版本-内核作者-内核说明/分支名称-时间-无/DTB
     - 内核说明/分支名称中

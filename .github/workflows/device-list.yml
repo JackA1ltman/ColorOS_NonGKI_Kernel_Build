@@ -22,3 +22,17 @@ jobs:
       fail-fast: true
     uses: ./.github/workflows/build-toraidl-jackaltman.yml
     secrets: inherit
+
+  JackA1ltman-Chippa-a-SM8350-ColorOS16:
+    name: "JackA1ltman - Chippa-a - SM8350 - ColorOS 16"
+    strategy:
+      fail-fast: true
+    uses: ./.github/workflows/build-chippa-a-jackaltman.yml
+    secrets: inherit
+
+  JackA1ltman-tqmane-SM8350-ColorOS16:
+    name: "JackA1ltman - tqmane - SM8250 - ColorOS 16"
+    strategy:
+      fail-fast: true
+    uses: ./.github/workflows/build-tqmane-jackaltman.yml
+    secrets: inherit
