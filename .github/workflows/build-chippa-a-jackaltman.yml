@@ -22,7 +22,7 @@ jobs:
             device: "oneplus9rt-coloros16"
             defconfig: "9rt_defconfig"
             device_codename: "martini"
-            ksu: true
+            ksu: false
             kpm: false
       fail-fast: false
     env:
