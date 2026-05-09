@@ -1,10 +1,10 @@
-| 内核作者 | 对应系统 | 设备 | 命名 |
+| 内核作者 | 对应系统 | 设备 | 命名 | KernelSU |
 |---|---|---|---|
-| toraidl | ColorOS 16 | 一加8系列 | original |
-| JackA1ltman - wcedla | ColorOS 16 | 一加8系列 | original |
-| JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | upstream-original |
-| JackA1ltman - Chippa-a | ColorOS 16 | 一加9 RT | original |
-| JackA1ltman - tqmane | ColorOS 16 | 一加9、一加9 Pro | original |
+| toraidl | ColorOS 16 | 一加8系列 | original | ReSukiSU |
+| JackA1ltman - wcedla | ColorOS 16 | 一加8系列 | original | ReSukiSU |
+| JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | upstream-original | ReSukiSU |
+| JackA1ltman - Chippa-a | ColorOS 16 | 一加9 RT | original | xxksu |
+| JackA1ltman - tqmane | ColorOS 16 | 一加9、一加9 Pro | original | xxksu |
 
 ### 必读事项
 1. DTB版本一加8全系、一加9全系可刷入
@@ -15,6 +15,8 @@
         - 其他名称均为个人维护的版本
 3. KernelSU
     - AK3包命名存在-ksu则为携带KernelSU的版本
-    - 管理器为[ReSukiSU](https://github.com/ReSukiSU/ReSukiSU)
+    - 管理器：
+        - [ReSukiSU](https://github.com/ReSukiSU/ReSukiSU)
+        - [xxksu](https://github.com/backslashxx/KernelSU)
 4. KPM
     - 支持ReSukiSU
