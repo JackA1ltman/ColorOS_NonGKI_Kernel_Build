@@ -23,7 +23,7 @@ jobs:
             defconfig: "9rt_defconfig"
             device_codename: "martini"
             ksu: true
-            kpm: true
+            kpm: false
       fail-fast: false
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
