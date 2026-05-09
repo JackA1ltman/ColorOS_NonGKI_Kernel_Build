@@ -16,7 +16,7 @@ jobs:
             modules_repo: "https://github.com/JackA1ltman/android_kernel_modules_and_devicetree_oppo_sm8350.git"
             command: "LLVM=1 LLVM_IAS=1"
             branch: "oneplus/sm8350v_15.0.0_oneplus9pro"
-            modules_branch: "oneplus/sm8350v_15.0.0_oneplus9pro"
+            modules_branch: "oplus/sm8350v_15.0.0_oneplus_9Pro"
             name: "original"
             author: "JackA1ltman-tqmane"
             device: "oneplus9series-coloros16"
