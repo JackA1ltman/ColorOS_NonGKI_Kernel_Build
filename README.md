@@ -1,7 +1,7 @@
 | 内核作者 | 对应系统 | 设备 | 命名 |
 |---|---|---|---|
 | toraidl | ColorOS 16 | 一加8系列 | original |
-| wcedla | ColorOS 16 | 一加8系列 | original |
+| JackA1ltman - wcedla | ColorOS 16 | 一加8系列 | original |
 | JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | upstream-original |
 | JackA1ltman - Chippa-a | ColorOS 16 | 一加9 RT | original |
 | JackA1ltman - tqmane | ColorOS 16 | 一加9、一加9 Pro | original |
