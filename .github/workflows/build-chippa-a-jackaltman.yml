@@ -13,7 +13,7 @@ jobs:
       matrix:
         include:
           - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8350.git"
-            modules_repo: "https://github.com/JackA1ltman/android_kernel_modules_and_devicetree_oppo_sm8350.git"
+            modules_repo: "https://github.com/JackA1ltman/android_kernel_modules_and_devicetree_oneplus_sm8350.git"
             command: "LLVM=1 LLVM_IAS=1"
             branch: "oneplus/sm8350_b_16.0.0_oneplus9rt"
             modules_branch: "oneplus/sm8350_b_16.0.0_oneplus9rt"
