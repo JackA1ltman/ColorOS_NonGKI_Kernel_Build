@@ -3,8 +3,8 @@
 | toraidl | ColorOS 16 | 一加8系列 | original | ReSukiSU |
 | JackA1ltman - wcedla | ColorOS 16 | 一加8系列 | original | ReSukiSU |
 | JackA1ltman - toraidl | ColorOS 15/16 | 一加8系列 | upstream-original | ReSukiSU |
-| JackA1ltman - Chippa-a | ColorOS 16 | 一加9 RT | original | xxksu |
-| JackA1ltman - tqmane | ColorOS 16 | 一加9、一加9 Pro | original | xxksu |
+| JackA1ltman - Chippa-a | ColorOS 16 | 一加9 RT | original | ReSukiSU |
+| JackA1ltman - tqmane | ColorOS 16 | 一加9、一加9 Pro | original | ReSukiSU |
 
 ### 必读事项
 1. DTB版本一加8全系、一加9全系可刷入
