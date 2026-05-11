@@ -134,6 +134,24 @@ jobs:
           sed -i 's!BLOCK=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;!BLOCK=auto;!g' Anykernel3/anykernel.sh
           sed -i 's/IS_SLOT_DEVICE=0;/is_slot_device=auto;/g' Anykernel3/anykernel.sh
 
+      - name: Make Anykernel3 Flasher - NoDTB
+        run: |
+          TIME=$(date +"%Y%m%d%H%M%S")
+
+          cd $GITHUB_WORKSPACE/kernel/msm-5.4
+          mkdir -p tmp
+
+          cp -fp $GITHUB_WORKSPACE/kernel/msm-5.4/out/arch/arm64/boot/Image tmp
+
+          cp -rp ./Anykernel3/* tmp
+          cd tmp
+          7za a -mx9 tmp.zip *
+          cd ..
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KPM_NAME }}${{ env.KSU_NAME }}.zip
+          rm -rf tmp
+
+          echo "PACK_NAME=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KPM_NAME }}${{ env.KSU_NAME }}.zip" >> $GITHUB_ENV
+
       - name: Make Anykernel3 Flasher - DTB
         run: |
           TIME=$(date +"%Y%m%d%H%M%S")
@@ -159,4 +177,5 @@ jobs:
         with:
           name: Kernel-${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}
           path: |
+            kernel/msm-5.4/${{ env.PACK_NAME }}
             kernel/msm-5.4/${{ env.PACK_NAME_DTB }}
