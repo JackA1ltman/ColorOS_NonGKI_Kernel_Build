@@ -18,13 +18,6 @@ jobs:
             name: "original"
             author: "toraidl"
             device: "oneplus8series-coloros16"
-            ksu: false
-          - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
-            command: "NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip"
-            branch: "upstream-original"
-            name: "original"
-            author: "toraidl"
-            device: "oneplus8series-coloros16"
             ksu: true
       fail-fast: false
     env:
