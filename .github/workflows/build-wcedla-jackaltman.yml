@@ -14,14 +14,7 @@ jobs:
         include:
           - repo: "https://github.com/JackA1ltman/kernel_oneplus_sm8250_coloros16.git"
             command: "LD=ld.lld"
-            branch: "lineage-20"
-            name: "original"
-            author: "JackA1ltman-Wcedla"
-            device: "oneplus8series-coloros16"
-            ksu: false
-          - repo: "https://github.com/JackA1ltman/kernel_oneplus_sm8250_coloros16.git"
-            command: "LD=ld.lld"
-            branch: "lineage-20"
+            branch: "upstream"
             name: "original"
             author: "JackA1ltman-Wcedla"
             device: "oneplus8series-coloros16"
