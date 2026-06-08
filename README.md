@@ -19,4 +19,4 @@
         - [ReSukiSU](https://github.com/ReSukiSU/ReSukiSU)
         - [xxksu](https://github.com/backslashxx/KernelSU)
 4. KPM
-    - 支持ReSukiSU
+    - 不支持的特性

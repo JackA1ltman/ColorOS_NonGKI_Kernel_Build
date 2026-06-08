@@ -23,7 +23,6 @@ jobs:
             defconfig: "9p_defconfig"
             device_codename: "lemonadev"
             ksu: true
-            kpm: false
       fail-fast: false
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
@@ -87,16 +86,8 @@ jobs:
             echo "CONFIG_KSU_MANUAL_HOOK=y" >> ./arch/arm64/configs/${{ matrix.defconfig }}
             curl -LSs "https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/refs/heads/mainline/Patches/syscall_hook_patches.sh" | bash -s
 
-            if [[ "${{ matrix.kpm }}" == "true" ]]; then
-                echo "KPM_NAME=-kpm" >> $GITHUB_ENV
-
-                echo "CONFIG_KPM=y" >> ./arch/arm64/configs/${{ matrix.defconfig }}
-                echo "CONFIG_KALLSYMS=y" >> ./arch/arm64/configs/${{ matrix.defconfig }}
-                echo "CONFIG_KALLSYMS_ALL=y" >> ./arch/arm64/configs/${{ matrix.defconfig }}
-                curl "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU_patch/refs/heads/main/kpm/patch_linux" -o patch
-                chmod +x patch
-            fi
-          else
+            echo "CONFIG_KALLSYMS=y" >> ./arch/arm64/configs/${{ matrix.defconfig }}
+            echo "CONFIG_KALLSYMS_ALL=y" >> ./arch/arm64/configs/${{ matrix.defconfig }}
             echo "KSU_NAME=" >> $GITHUB_ENV
           fi
 
@@ -147,10 +138,10 @@ jobs:
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KPM_NAME }}${{ env.KSU_NAME }}.zip
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}.zip
           rm -rf tmp
 
-          echo "PACK_NAME=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KPM_NAME }}${{ env.KSU_NAME }}.zip" >> $GITHUB_ENV
+          echo "PACK_NAME=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}.zip" >> $GITHUB_ENV
 
       - name: Make Anykernel3 Flasher - DTB
         run: |
@@ -167,10 +158,10 @@ jobs:
           cd tmp
           7za a -mx9 tmp.zip *
           cd ..
-          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KPM_NAME }}${{ env.KSU_NAME }}-DTB.zip
+          cp -fp tmp/tmp.zip ${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}-DTB.zip
           rm -rf tmp
 
-          echo "PACK_NAME_DTB=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KPM_NAME }}${{ env.KSU_NAME }}-DTB.zip" >> $GITHUB_ENV
+          echo "PACK_NAME_DTB=${{ matrix.device }}-${{ matrix.author }}-${{ matrix.name }}-$TIME${{ env.KSU_NAME }}-DTB.zip" >> $GITHUB_ENV
 
       - name: Upload Build Artifacts For Anykernel3
         uses: actions/upload-artifact@v4
