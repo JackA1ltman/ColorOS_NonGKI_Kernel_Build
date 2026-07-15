@@ -96,7 +96,7 @@ jobs:
       - name: Get Packing Tools
         run: |
           cd $GITHUB_WORKSPACE/kernel/msm-5.4
-          git clone "https://github.com/osm0sis/AnyKernel3.git" -b "master" Anykernel3 --depth=1
+          git clone "https://github.com/osm0sis/AnyKernel3.git" -b "master" Anykernel3
           cd Anykernel3
           git checkout dca9dc370838d919d56c1f59ec78b27a14a72c68
           cd ../
