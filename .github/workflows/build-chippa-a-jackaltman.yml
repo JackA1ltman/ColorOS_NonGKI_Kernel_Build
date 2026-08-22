@@ -92,9 +92,6 @@ jobs:
             echo "KSU_NAME=" >> $GITHUB_ENV
           fi
 
-          cd drivers/kernelsu
-          git reset --hard 6f8ac88cdf19f178c8a6a3d8ae660aef88cf9906
-
       - name: Get Packing Tools
         run: |
           cd $GITHUB_WORKSPACE/kernel/msm-5.4
