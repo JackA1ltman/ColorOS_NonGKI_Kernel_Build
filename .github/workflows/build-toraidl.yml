@@ -12,9 +12,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - repo: "https://github.com/JackA1ltman/android_kernel_oneplus_sm8250_los_noksu.git"
-            command: "NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip"
-            branch: "upstream-original"
+          - repo: "https://github.com/toraidl/android_kernel_oneplus_sm8250.git"
+            command: "NM=llvm-nm OBJDUMP=llvm-objdump STRIP=llvm-strip CONFIG_TECHPACK_CAMERA_ONEPLUS=y"
+            branch: "bpf-5.15-backport"
             name: "original"
             author: "toraidl"
             device: "oneplus8series-coloros16"
