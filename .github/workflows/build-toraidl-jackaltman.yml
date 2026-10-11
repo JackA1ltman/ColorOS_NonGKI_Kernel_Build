@@ -77,7 +77,7 @@ jobs:
 
           curl -C - --progress-bar -L "https://github.com/ZyCromerZ/Clang/releases/download/23.0.0git-20260130-release/Clang-23.0.0git-20260130.tar.gz" -o "clang-custom.tar.xz"
           mkdir clang-custom
-          tar -C clang-custom/ -zxf clang-custom.tar.xz --strip-components 1
+          tar -C clang-custom/ -zxf clang-custom.tar.xz
 
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
