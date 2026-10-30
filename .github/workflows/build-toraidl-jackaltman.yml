@@ -7,7 +7,7 @@ on:
 jobs:
   build-kernel:
     name: Oneplus 8 Series - ${{ matrix.name }} - ${{ matrix.author }}
-    runs-on: ubuntu-latest # u can changed to ubuntu 22.04, and need container set ubuntu-latest
+    runs-on: ubuntu-24.04 # u can changed to ubuntu 22.04, and need container set ubuntu-latest
     # container: ubuntu:bionic # if u need use arch linux -> archlinux/archlinux:latest or ubuntu 20.04 -> ubuntu:focal
     strategy:
       matrix:
